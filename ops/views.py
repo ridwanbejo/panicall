@@ -72,12 +72,12 @@ class EmergencyCallViewSet(viewsets.ModelViewSet):
             team_member_2.save()
 
             medics = EmergencyTeam.objects.filter(emergency_call_code=emergency_call.first())
-            return Response({"message":"ok", "data": EmergencyTeamSerializer(medics, many=True).data},  status.HTTP_200_OK)
+            return Response(EmergencyTeamSerializer(medics, many=True).data,  status.HTTP_200_OK)
 
         else:
 
             medics = EmergencyTeam.objects.filter(emergency_call_code=emergency_call.first())
-            return Response({"message":"already created", "data": EmergencyTeamSerializer(medics, many=True).data},  status.HTTP_200_OK)
+            return Response(EmergencyTeamSerializer(medics, many=True).data,  status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
         """
