@@ -1,0 +1,21 @@
+from django.contrib.gis.db.models.functions import Distance
+from django.contrib.gis.geos import Point
+from django.contrib.gis.measure import D
+from user_profile.models import MedicalOfficer
+from ops.models import EmergencyTeam
+
+
+point = Point(4.4601406, 51.9035648)
+
+points = GeoLocationTracker.objects.filter(
+    location__distance_lte=(point, D(m=10000))
+) \
+.annotate(distance=Distance('location', point)) \
+.order_by('distance')
+
+for p in points:
+    print p.user.id, ' ', p.location, ' ', p.distance
+
+officers = MedicalOfficer.objects.filter(user__id__in=(1,2,3,4,5))
+
+teams = EmergencyTeam.objects.filter(status='accept').filter(officer__user__id__in=(2,3))
