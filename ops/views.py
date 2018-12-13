@@ -28,7 +28,8 @@ class EmergencyCallViewSet(viewsets.ModelViewSet):
     permission_classes = (EmergencyCallPermission,)
 
     def retrieve(self, request, *args, **kwargs):
-        emergency_call = EmergencyCall.objects.filter(patient__user__id=request.user.id).filter(call_status='onprogress')
+        patient = Patient.objects.all().order_by('?').first()
+        emergency_call = EmergencyCall.objects.filter(patient=patient).filter(call_status='onprogress')
         emergency_call_count = emergency_call.count()
 
         if emergency_call_count < 1:
@@ -39,7 +40,7 @@ class EmergencyCallViewSet(viewsets.ModelViewSet):
             psychologist_distance = randint(0, 1000)
 
             new_emergency_call = EmergencyCall(
-                patient = Patient.objects.get(user=request.user),
+                patient = patient,
                 call_status = 'onprogress',
                 evidence_lat = float(randint(48, 58)),
                 evidence_lon = float(randint(48, 58)),
